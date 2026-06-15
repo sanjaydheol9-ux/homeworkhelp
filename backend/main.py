@@ -34,9 +34,12 @@ class QuizRequest(BaseModel):
 
 # ─── Upload Endpoint (existing) ────────────────────────────
 
+import tempfile
+
 @app.post("/api/upload-lesson")
 async def process_lesson(file: Annotated[UploadFile, File(...)]):
-    temp_file_path = f"temp_{file.filename}"
+    temp_dir = tempfile.gettempdir()
+    temp_file_path = os.path.join(temp_dir, f"temp_{file.filename}")
 
     try:
         # Save uploaded file to disk temporarily
