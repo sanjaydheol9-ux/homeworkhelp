@@ -111,7 +111,7 @@ body {
   position: relative;
   z-index: 1;
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
 }
 
@@ -1050,17 +1050,72 @@ body {
 
 @media (max-width: 900px) {
   .app-shell { flex-direction: column; }
+  
   .sidebar { 
     width: 100%; 
     min-width: 100%; 
     height: auto;
-    max-height: 35vh;
+    max-height: 25dvh;
     border-right: none;
     border-bottom: 1px solid var(--border-dim);
+    flex-shrink: 0;
   }
-  .sidebar-header { padding: 12px 18px 10px; }
-  .sidebar-body { padding: 10px 18px; }
-  .chat-row { max-width: 95%; }
-  .tab-bar { overflow-x: auto; white-space: nowrap; }
-  .dropzone { padding: 16px 12px; }
+  
+  .sidebar-header { 
+    padding: 10px 14px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebar-header h1 { font-size: 14px; margin: 0; }
+  .sidebar-header p { display: none; /* Hide subtitle on mobile to save space */ }
+  
+  .sidebar-body { 
+    padding: 8px 14px; 
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: center;
+  }
+  
+  .sidebar-body::-webkit-scrollbar { display: none; } /* Hide scrollbar on mobile */
+  
+  .dropzone { 
+    padding: 12px 16px; 
+    min-width: 200px;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  .sidebar-stats {
+    display: flex;
+    flex-direction: row;
+    min-width: max-content;
+  }
+
+  .stat-card {
+    padding: 8px 12px;
+    flex-shrink: 0;
+  }
+  
+  .main-content {
+    flex: 1;
+    height: 75dvh;
+  }
+
+  .chat-row { max-width: 98%; padding: 0 4px; }
+  .tab-bar { overflow-x: auto; white-space: nowrap; padding: 0 10px; }
+  .tab-btn { padding: 12px 14px; font-size: 11px; }
+  
+  .chat-input-bar {
+    padding: 10px 12px;
+  }
+  
+  .chat-input {
+    padding: 12px 14px;
+    font-size: 14px; /* Prevent iOS zoom */
+  }
 }
