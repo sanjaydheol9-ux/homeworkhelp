@@ -23,6 +23,8 @@ interface QuizQuestion {
   hint: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 /* ═══════════════════════════════════════════════════════════
    INLINE SVG ICONS
    ═══════════════════════════════════════════════════════════ */
@@ -240,7 +242,7 @@ export default function MissionControl() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await fetch("http://127.0.0.1:8000/api/upload-lesson", {
+      const res = await fetch(`${API_BASE}/api/upload-lesson`, {
         method: "POST",
         body: formData,
       });
@@ -276,7 +278,7 @@ export default function MissionControl() {
     setIsChatLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat", {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: updatedMessages, parsedData }),
@@ -333,7 +335,7 @@ export default function MissionControl() {
         // Step 1: OCR the image via backend
         const formData = new FormData();
         formData.append("file", imageFile);
-        const ocrRes = await fetch("http://127.0.0.1:8000/api/upload-lesson", {
+        const ocrRes = await fetch(`${API_BASE}/api/upload-lesson`, {
           method: "POST",
           body: formData,
         });
@@ -362,7 +364,7 @@ export default function MissionControl() {
           },
         ];
 
-        const chatRes = await fetch("http://127.0.0.1:8000/api/chat", {
+        const chatRes = await fetch(`${API_BASE}/api/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -399,7 +401,7 @@ export default function MissionControl() {
     setQuizPasswordInput("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/generate-test", {
+      const res = await fetch(`${API_BASE}/api/generate-test`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ parsedData }),
