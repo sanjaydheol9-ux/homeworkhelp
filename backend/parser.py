@@ -1,9 +1,7 @@
-import fitz  # This is the import name for PyMuPDF
-import pytesseract
-from PIL import Image
+import fitz  # PyMuPDF
 import os
-
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+import base64
+from openai import OpenAI
 
 
 # ─── Supported file extensions ─────────────────────────────
@@ -84,11 +82,39 @@ def _extract_from_pdf(file_path: str) -> list[dict]:
 
 def _extract_from_image(file_path: str) -> list[dict]:
     """
-    Extract text from an image file using pytesseract OCR.
+    Extract text from an image file using Groq's Vision LLM.
     Returns the same structure as the PDF parser, with page_number = 1.
     """
-    image = Image.open(file_path)
-    raw_text = pytesseract.image_to_string(image)
+    with open(file_path, "rb") as image_file:
+        base64_image = base64.b64encode(image_file.read()).decode('utf-8')
+
+    client = OpenAI(
+        api_key=os.getenv("OPENAI_API_KEY", ""),
+        base_url=os.getenv("OPENAI_BASE_URL", "https://api.groq.com/openai/v1"),
+    )
+
+    response = client.chat.completions.create(
+        model="llama-3.2-11b-vision-preview",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text", 
+                        "text": "Extract all the text from this image exactly as it appears. Do not include any extra commentary, introductions, or markdown formatting. Just output the raw text."
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{base64_image}",
+                        },
+                    },
+                ],
+            }
+        ],
+        temperature=0.1,
+    )
+    raw_text = response.choices[0].message.content or ""
 
     master_list = []
     line_counter = 1
