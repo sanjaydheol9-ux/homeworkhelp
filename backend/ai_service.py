@@ -10,10 +10,10 @@ load_dotenv()
 # Swap OPENAI_BASE_URL in .env to point at Groq, a local server, etc.
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY", ""),
-    base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+    base_url=os.getenv("OPENAI_BASE_URL", "https://api.groq.com/openai/v1"),
 )
 
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+MODEL = os.getenv("OPENAI_MODEL", "llama-3.1-8b-instant")
 
 
 # ─── Helpers ────────────────────────────────────────────────
